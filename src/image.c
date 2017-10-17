@@ -273,6 +273,8 @@ void draw_detections_cv(IplImage* show_img, int num, float thresh, box *boxes, f
 			if (top < 0) top = 0;
 			if (bot > show_img->height - 1) bot = show_img->height - 1;
 
+			printf("Left=%d, Top=%d, Right=%d, Bottom=%d\n", left, top, right, bot);
+
 			float const font_size = show_img->height / 1000.F;
 			CvPoint pt1, pt2, pt_text, pt_text_bg1, pt_text_bg2;
 			pt1.x = left;
