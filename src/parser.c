@@ -467,10 +467,9 @@ route_layer parse_route(list *options, size_params params, network net)
         layers[i] = index;
         sizes[i] = net.layers[index].outputs;
     }
-    int batch = params.batch;
-
+    int batch = params.batch;    
     route_layer layer = make_route_layer(batch, n, layers, sizes);
-
+    
     convolutional_layer first = net.layers[layers[0]];
     layer.out_w = first.out_w;
     layer.out_h = first.out_h;
@@ -608,10 +607,8 @@ network parse_network_cfg(char *filename)
     n = n->next;
     int count = 0;
     free_section(s);
-    fprintf(stderr, "layer     filters    size              input                output\n");
     while(n){
         params.index = count;
-        fprintf(stderr, "%5d ", count);
         s = (section *)n->val;
         options = s->options;
         layer l = {0};
@@ -658,14 +655,14 @@ network parse_network_cfg(char *filename)
         }else if(lt == DROPOUT){
             l = parse_dropout(options, params);
             l.output = net.layers[count-1].output;
-            l.delta = net.layers[count-1].delta;
+            l.delta = net.layers[count-1].delta;  
 #ifdef GPU
             l.output_gpu = net.layers[count-1].output_gpu;
             l.delta_gpu = net.layers[count-1].delta_gpu;
 #endif
         }else{
             fprintf(stderr, "Type not recognized: %s\n", s->type);
-        }
+        }                 
         l.dontload = option_find_int_quiet(options, "dontload", 0);
         l.dontloadscales = option_find_int_quiet(options, "dontloadscales", 0);
         option_unused(options);
@@ -680,7 +677,7 @@ network parse_network_cfg(char *filename)
             params.c = l.out_c;
             params.inputs = l.outputs;
         }
-    }   
+    }
     free_list(sections);
     net.outputs = get_network_output_size(net);
     net.output = get_network_output(net);
@@ -1013,7 +1010,6 @@ void load_weights_upto(network *net, char *filename, int cutoff)
         cuda_set_device(net->gpu_index);
     }
 #endif
-    fprintf(stderr, "Loading weights from %s...", filename);
     fflush(stdout);
     FILE *fp = fopen(filename, "rb");
     if(!fp) file_error(filename);
@@ -1077,7 +1073,6 @@ void load_weights_upto(network *net, char *filename, int cutoff)
 #endif
         }
     }
-    fprintf(stderr, "Done!\n");
     fclose(fp);
 }
 

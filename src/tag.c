@@ -124,7 +124,6 @@ void test_tag(char *cfgfile, char *weightfile, char *filename)
         time=clock();
         float *predictions = network_predict(net, X);
         top_predictions(net, 10, indexes);
-        printf("%s: Predicted in %f seconds.\n", input, sec(clock()-time));
         for(i = 0; i < 10; ++i){
             int index = indexes[i];
             printf("%.1f%%: %s\n", predictions[index]*100, names[index]);
